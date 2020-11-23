@@ -1,0 +1,14 @@
+<h3 appHighlight>{{ product.title | uppercase }}</h3>
+<img [src]="product.image" />
+<p class="price">{{ product.price }}</p>
+<div [ngSwitch]="product.price">
+  <p *ngSwitchCase="200.0">$20.00 de descuento en tu siguiente compra</p>
+  <p *ngSwitchCase="500.0">Envío gratuito a toda la República Mexicana</p>
+  <p *ngSwitchCase="80000.0">
+    Envío gratuito a toda la República Mexicana + 5% de descuento extra
+  </p>
+  <strong>{{ product.price | currency }}</strong>
+  <p>{{ product.description | slice: 0:10 }}</p>
+  <p *ngSwitchDefault>Comprame!</p>
+  <button (click)="addToCart()">Agregar al carrito.</button>
+</div>
