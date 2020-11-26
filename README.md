@@ -1545,3 +1545,21 @@ es una herramienta para colocar minimos de costo para nuestras aplicaciones.
 angular.json permite configurar el peso maximo de nuestros paquetes
 
 ![](./readme-static/busgets.png)
+
+## Licencia 📄
+
+MIT
+
+## Conceptos Aprendidos 🤓
+
+- <https://platzi.com/cursos/react-avanzado/>
+-
+
+## Certificado
+
+- [Diploma Angular 101](./diploma-angular-101.pdf)
+- [Diploma Angular Profesional](./diploma-diploma-angular-profesional.pdf)
+
+---
+
+👩‍💻 with ❤️ by [silnose](https://github.com/silnose) 😊
