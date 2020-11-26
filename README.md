@@ -1552,7 +1552,9 @@ MIT
 
 ## Conceptos Aprendidos 🤓
 
-- <https://platzi.com/cursos/react-avanzado/>
+- <https://platzi.com/courses/angular/> ✔
+- <https://platzi.com/courses/angular-profesional/> ✔
+- <https://platzi.com/courses/angular-performance/>
 -
 
 ## Certificado
