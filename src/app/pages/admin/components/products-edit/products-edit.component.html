@@ -1,0 +1,85 @@
+<form [formGroup]="productForm" novalidate (ngSubmit)="onSubmit($event)">
+  <mat-card class="product-card">
+    <mat-card-header>
+      <mat-card-title>New Product</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input
+              matInput
+              placeholder="Product Title"
+              formControlName="title"
+            />
+            <mat-error
+              *ngIf="productForm.controls['title'].hasError('required')"
+            >
+              Title is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input
+              matInput
+              placeholder="Product Description"
+              formControlName="description"
+            />
+            <mat-error
+              *ngIf="productForm.controls['description'].hasError('required')"
+            >
+              Description <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input
+              type="number"
+              matInput
+              placeholder="Product Price"
+              formControlName="price"
+            />
+            <mat-error *ngIf="priceField.hasError('required')">
+              Price <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="priceField.hasError('price_invalid')">
+              Price <strong> Invalid</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <textarea
+              matInput
+              placeholder="Product Image Path"
+              formControlName="image"
+            ></textarea>
+            <mat-error
+              *ngIf="productForm.controls['image'].hasError('required')"
+            >
+              Product Image Path is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="productForm.invalid"
+      >
+        Submit
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</form>

@@ -1,19 +1,59 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { ProductComponent } from './components/product/product.component';
-import { HomeComponent } from './components/home/home.component';
-import { ProductsComponent } from './components/products/products.component';
-import { ContactComponent } from './components/contact/contact.component';
+import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
+import { NotFoundComponent } from './components/not-found/not-found.component';
+import { LayoutComponent } from './components/layout/layout.component';
+import { AdminGuard } from './guard/admin/admin.guard';
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent },
-  { path: 'product', component: ProductComponent },
-  { path: 'products', component: ProductsComponent },
-  { path: 'contact', component: ContactComponent },
+  {
+    path: '',
+    component: LayoutComponent,
+    children: [
+      { path: '', redirectTo: '/home', pathMatch: 'full' },
+      {
+        path: 'home',
+        loadChildren: () =>
+          import('./pages/home/home.module').then((m) => m.HomeModule),
+      },
+      {
+        path: 'products',
+        loadChildren: () =>
+          import('./pages/products/products.module').then(
+            (m) => m.ProductsModule
+          ),
+      },
+      {
+        path: 'order',
+        loadChildren: () =>
+          import('./pages/order/order.module').then((m) => m.OrderModule),
+      },
+      {
+        path: 'contact',
+        loadChildren: () =>
+          import('./pages/contact/contact.module').then((m) => m.ContactModule),
+      },
+    ],
+  },
+  {
+    path: 'auth',
+    loadChildren: () =>
+      import('./pages/auth/auth.module').then((m) => m.AuthModule),
+  },
+  {
+    path: 'admin',
+    canActivate: [AdminGuard],
+    loadChildren: () =>
+      import('./pages/admin/admin.module').then((m) => m.AdminModule),
+  },
+  { path: '**', component: NotFoundComponent },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes, {
+      preloadingStrategy: PreloadAllModules,
+    }),
+  ],
 
   exports: [RouterModule],
 })

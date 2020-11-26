@@ -1,0 +1,12 @@
+<div *ngIf="product$ | async as product; else noProductBlock">
+  <img [src]="product?.image" alt="" />
+
+  <div>
+    <ul>
+      <li>Nombre: {{ product?.title }}</li>
+      <li>Precio: {{ product?.price | currency }}</li>
+    </ul>
+    <p>{{ product?.description }}</p>
+  </div>
+</div>
+<ng-template #noProductBlock>Nothing Here..</ng-template>

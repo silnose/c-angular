@@ -1,0 +1,37 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <div class="columns is-mobile" style="width: 100%">
+      <div class="column is-11">
+        <nav>
+          <a mat-button routerLink="/home" routerLinkActive="active">Home</a>
+
+          <a mat-button routerLink="/products" routerLinkActive="active"
+            >Products</a
+          >
+
+          <a mat-button routerLink="/contact" routerLinkActive="active"
+            >Contact</a
+          >
+        </nav>
+      </div>
+      <div class="column is-1">
+        <a
+          mat-raised-button
+          routerLink="/order"
+          routerLinkActive="active"
+          class="is-pulled-right"
+        >
+          <mat-icon aria-hidden="false" aria-label="cart icon"
+            >shopping_cart</mat-icon
+          >
+          <span
+            [matBadge]="total$ | async"
+            matBadgeOverlap="false"
+            matBadgeColor="warn"
+            >Cart</span
+          >
+        </a>
+      </div>
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>

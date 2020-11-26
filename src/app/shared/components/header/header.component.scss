@@ -1,0 +1,6 @@
+nav a {
+  text-decoration: none;
+  &.active {
+    background-color: blue;
+  }
+}

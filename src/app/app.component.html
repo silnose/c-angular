@@ -1,13 +1,1 @@
-<br />
 <router-outlet></router-outlet>
-<input type="text" [(ngModel)]="title" name="hola" />
-<input type="text" [(ngModel)]="power" name="power" /> {{ power | exponential }}
-<br />
-<button (click)="addItem()">Add item</button>
-<ul>
-  <li *ngIf="array.length === 0">La lista está vacía</li>
-  <li *ngFor="let item of array; index as i">
-    {{ item }} ({{ i }})
-    <button (click)="deleteItem(i)">Delete</button>
-  </li>
-</ul>

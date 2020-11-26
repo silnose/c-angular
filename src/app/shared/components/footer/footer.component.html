@@ -1,0 +1,41 @@
+<footer>
+  <div class="container">
+    <div class="columns">
+      <div class="column">
+        <h3>Product</h3>
+        <ul>
+          <li><a href="#">Our Products</a></li>
+          <li><a href="#">Offers</a></li>
+          <li><a href="#">Last Products</a></li>
+        </ul>
+      </div>
+      <div class="column">
+        <h3>About</h3>
+        <ul>
+          <li><a href="#">About us</a></li>
+          <li><a href="#">Our Stores</a></li>
+        </ul>
+      </div>
+      <div class="column">
+        <h3>Contact</h3>
+        <mat-form-field>
+          <input
+            matInput
+            [formControl]="emailField"
+            type="email"
+            name="email"
+            placeholder="Your email here"
+          />
+        </mat-form-field>
+        &nbsp;&nbsp;&nbsp;
+        <button
+          mat-raised-button
+          [disabled]="emailField.invalid"
+          (click)="sendEmail()"
+        >
+          Send
+        </button>
+      </div>
+    </div>
+  </div>
+</footer>
