@@ -8,6 +8,7 @@ import { ExponentialPipe } from './pipes/exponential/exponential.pipe';
 import { MaterialModule } from '../material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { GroupProductPipe } from './pipes/group/group-product.pipe';
+import { QuicklinkModule } from 'ngx-quicklink';
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -23,6 +24,12 @@ import { GroupProductPipe } from './pipes/group/group-product.pipe';
     ExponentialPipe,
     GroupProductPipe,
   ],
-  imports: [CommonModule, RouterModule, MaterialModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MaterialModule,
+    ReactiveFormsModule,
+    QuicklinkModule,
+  ],
 })
 export class SharedModule {}

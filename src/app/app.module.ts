@@ -19,8 +19,11 @@ import { MatListModule } from '@angular/material/list';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireStorageModule } from '@angular/fire/storage';
+import { AngularFireAnalyticsModule, CONFIG } from '@angular/fire/analytics';
 import { environment } from 'src/environments/environment';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { QuicklinkModule } from 'ngx-quicklink';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 Sentry.init({
   dsn:
@@ -40,7 +43,7 @@ Sentry.init({
 @NgModule({
   declarations: [AppComponent, LayoutComponent],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
     FormsModule,
     SharedModule,
@@ -56,9 +59,20 @@ Sentry.init({
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
     AngularFireStorageModule,
+    AngularFireAnalyticsModule,
+    QuicklinkModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    {
+      provide: CONFIG,
+      useValue: {
+        send_page_view: true,
+        allow_ad_personalization_signals: true,
+        anonymize_ip: true,
+      },
+    },
   ],
   bootstrap: [AppComponent],
 })

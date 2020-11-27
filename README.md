@@ -1546,6 +1546,211 @@ angular.json permite configurar el peso maximo de nuestros paquetes
 
 ![](./readme-static/busgets.png)
 
+# Code splitting a nivel de rutas
+
+<https://angular.io/api/router/PreloadingStrategy>
+
+````javascript
+@NgModule({
+  imports: [RouterModule.forRoot(routes, {
+    preloadingStrategy: PreloadAllModules
+  })],
+  exports: [RouterModule]
+})```
+````
+
+- **PreLoadAllModules** : es una estrategia de carga el cual consiste en cargar todos los módulos de nuestra aplicación cuando el browser haya terminado de cargar nuestra pantalla inicial osea solo se pieden todos los modulos 1 sola vez.
+
+Esta tecnica es buena pero ineficiente para grandes aplicaciones ya que al tener muchos módulos esta estrategia estaremos cargando demasiados datos y puede que hasta innecesarios.
+
+- **NoPreloading**: solo carga el modulo necesario.
+
+# Implementando una propia estrategia de precarga (custom preload)
+
+Nosotros mismos podemos generar una estrategia para definir cuales modulos se van a cargar y cuales no.
+
+```
+ng g core/services/preload
+
+```
+
+```
+// archivo core/services/preload.services.ts
+import { Inyectable} from '@angular/core'
+import { PreloadingStrategy } from '@angular/router'
+import { Observable, of } from 'rxjs'
+
+expport class PreloadService implements PreloadingStrategy {
+    preload(route: Route, load: ()=> Observable<any>) : Observable<any> {
+        if (route.data && route.data['preload']) {
+            return load();
+        }else {
+            return of()
+            // of() observable vacio
+        }
+    }
+}
+```
+
+```
+// archivo app-routing.module.ts
+//agrega metadata a las rutas
+...
+import { PreloadService } from './core/services/preload.service'
+...
+{
+    path:'home',
+    loadChildren: ()=>import('path').then(m=>m.MModule),
+    data: { preload: true }
+    // ese preload puede ser una variable que nosotros creemos
+}
+...
+//cambiar la estrategia de precarga
+@NgModule({
+    imports: [RouterModule.forRoot(routes, {
+        preloadingStrategy: PreloadService
+    })],
+    exports: [RouterModule]
+})
+export class AppRoutingModule { }
+
+```
+
+Solo se precargaran los modulos que le indiquemos data: { preload: true }
+
+# Implementando QuicklinkStrategy
+
+<https://github.com/mgechev/ngx-quicklink>
+
+PreLoadAllModules -> consumimos mucha data, y si tenemos muchos modulos la carga inicial demorara mucho tiempo.
+
+CustomPreload -> Si el usuario va a un modulo no precargado el usuario notara la lentitud.
+
+Para sanear estas falencias tenemos QuicklinkStrategy.
+
+QuicklinkStrategy -> la precarga de modulos no la define el desarrollador sino sera dinamico en cuanto al compotamiento que le damos a la aplicacion. QuicklinkStrategy detecta los link que estan en el viewport y precarga esos modulos. Utiliza [IntersectionObserver](https://developer.mozilla.org/es/docs/Web/API/Intersection_Observer_API) para llevar a cabo su tarea.
+
+1- Instalar
+
+```
+npm install gnx-quicklink --save
+
+```
+
+2- Importarlo en app.module y shared.module ( o modulos que utilizen router link)
+
+```javascript
+import { QuicklinkStrategy } from 'ngx-quicklink'
+
+@NgModule({
+    ...
+    imports: [
+        ...
+        QuicklinkModule
+    ]
+})
+```
+
+3 - Implementar la estrategia en el app-routing
+
+```
+// app-routing.module.ts
+import { QuicklinkStrategy } from 'ngx-quicklink'
+
+...
+@NgModule({
+    imports: [RouterModule.forRoot(routes, {
+        enableTRacing: false,
+        preloadingStrategy: QuicklinkStrategy,
+        paramsInheritanceStrategy: 'always'
+    })],
+    exports: [RouterModule]
+})
+export class AppRoutingModule { }
+```
+
+# Usando Machine Learning para predecir rutas
+
+![](readme-static/makvo.png)
+
+Las cadenas de Markov permiten visualizar cada una de las probabilidades que se tienen en la navegación de la aplicación. Evalúa la probabilidad que tiene cada una de las vistas de la aplicación frente a un comportamiento previo de los usuarios, generando un modelo de predicción de precarga de módulos, con el fin de mejorar el rendimiento y la experiencia de usuario mientras navega por la aplicación web desarrollada,
+
+![](./readme-static/page-prob.png)
+![](./readme-static/load.png)
+
+Con estas formulas podemos preecargar solo lo que es mas probable que el usuario necesite.
+
+De esta manera surge Guess.js una librerria que se alimenta de datos y genera un modelo predictivo de navegacion basado en cadenas de Markov.
+
+Los datos los obtiene de google analitycs y necesita de datos historicos para operar.
+
+![](./readme-static/googleAguress.png)
+
+![](./readme-static/googleAguress-2.png.png)
+
+# Google Analytics y Angular
+
+AngularFireAnalytics
+<https://github.com/angular/angularfire/blob/v5/docs/analytics/getting-started.md>
+
+# Guess JS
+
+<https://github.com/guess-js/guess>
+
+# Precarga con Services workers
+
+<https://angular.io/guide/service-worker-getting-started>
+
+1- Instalar
+
+```
+ng add @angular/pwa --project platzi-store
+
+```
+
+# ¿Qué es Server Side Render?
+
+<https://angular.io/guide/universal>
+
+![](./readme-static/ssr.png)
+
+Beneficios
+
+- Mejorar el rendimiento de los dispositivos móviles y redes 3G
+- Facilitar web crawlers a través de la optimización de los motores de búsqueda (SEO)
+- Rapidamente podemos acceder a first-contentful paint (FCP)
+
+Fix issues comunes <https://github.com/angular/universal/blob/master/docs/gotchas.md>
+
+# ¿Qué es el Change Detection?
+
+Dos de los principales objetivos de Angular son ser predecible y eficiente. El framework necesita replicar el estado de nuestra aplicación en la UI combinando el estado y el template:
+.
+También es necesario actualizar la vista si se producen cambios en el estado. Este mecanismo de sincronización del HTML con nuestros datos se llama **“Change Detection”**. Todos los framework de frontend tienen su propia implementacion de esto, por ejemplo, React utiliza Virtual DOM, Angular utiliza la "change detection " y así sucesivamente.
+
+Hay 2 modos bajo los que funciona este concepto:
+
+- default
+- onPush
+
+```
+@Component({
+    ...
+    changeDetection:ChangeDetectionStrategy.OnPush
+    // changeDetection:ChangeDetectionStrategy.Default
+})
+```
+
+# Usando pipes puros
+
+Funciones puras : Sin importar cuantas veces ejecutes una funcion con los mismos parametros siempre va a dar el mismo resultado
+
+Este concepto de funcion pura lo utiliza angular en sus pipes para poder procesar y hacer una tecnica llamda Memoize, esta tecnica basicamente se encarga de hacer memorizacion de un valor calculado previamente.
+
+<https://www.freecodecamp.org/news/understanding-memoize-in-javascript-51d07d19430e/>
+
+# Async vs Subscribe
+
 ## Licencia 📄
 
 MIT

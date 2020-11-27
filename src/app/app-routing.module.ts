@@ -3,6 +3,8 @@ import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { AdminGuard } from './guard/admin/admin.guard';
+import { PreloadService } from '@core/services/preload/preload.service';
+import { QuicklinkStrategy } from 'ngx-quicklink';
 
 const routes: Routes = [
   {
@@ -14,6 +16,7 @@ const routes: Routes = [
         path: 'home',
         loadChildren: () =>
           import('./pages/home/home.module').then((m) => m.HomeModule),
+        data: { preload: true },
       },
       {
         path: 'products',
@@ -21,6 +24,7 @@ const routes: Routes = [
           import('./pages/products/products.module').then(
             (m) => m.ProductsModule
           ),
+        data: { preload: true },
       },
       {
         path: 'order',
@@ -51,8 +55,9 @@ const routes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, {
-      preloadingStrategy: PreloadAllModules,
-    }),
+    preloadingStrategy: QuicklinkStrategy,
+    initialNavigation: 'enabled'
+}),
   ],
 
   exports: [RouterModule],

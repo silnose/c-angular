@@ -9,5 +9,6 @@ export const environment = {
     storageBucket: 'angular-101-platzi.appspot.com',
     messagingSenderId: '262632029532',
     appId: '1:262632029532:web:5beb3382d165aecfa05599',
+    measurementId: 'G-F2YC6XX96E',
   },
 };
